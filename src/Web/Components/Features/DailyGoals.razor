@@ -1,0 +1,99 @@
+@rendermode InteractiveServer
+@inject GoalService _goalService
+
+<MudOverlay @bind-Visible="optionsVisible" LightBackground="true">
+    <MudContainer MaxWidth="MaxWidth.Small" Class="pt-lg-12 pt-md-8 pt-sm-4 pt-4 p-4 pb-lg-12 pb-md-8 pb-sm-4 pb-4"
+        style="height: 100vh; width: 100vw;">
+        <MudCard Width="100%" Height="100%" Style="padding: 8px">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5"><b>Options</b></MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Medium"
+                        OnClick="() => CloseOptions()" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.caption">Text</MudText>
+                <MudTextField T="string" Variant="Variant.Text" Disabled="@editBoxDisabled" Clearable="true"
+                    @bind-Text="selectedGoal.Text" />
+                <MudStack Class="pt-6">
+                    <MudFab Label=" " EndIcon="@Icons.Material.Filled.Edit" Size="Size.Medium" Color="Color.Primary"
+                        Disabled="editButtonDisabled" OnClick="EnableEdit" />
+                    <MudFab Label=" " EndIcon="@Icons.Material.Filled.Save" Size="Size.Medium" Color="Color.Secondary"
+                        Disabled="saveButtonDisabled" OnClick="SaveChanges" />
+                    <MudFab Label=" " EndIcon="@Icons.Material.Filled.Delete" Size="Size.Medium"
+                        Color="Color.Tertiary" OnClick="DeleteSelectedGoal"/>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudContainer>
+</MudOverlay>
+
+<MudOverlay @bind-Visible="newGoalVisible" LightBackground="true">
+    <MudContainer MaxWidth="MaxWidth.Small" Class="pt-lg-12 pt-md-8 pt-sm-4 pt-4 p-4 pb-lg-12 pb-md-8 pb-sm-4 pb-4"
+        style="height: 100vh; width: 100vw;">
+        <MudCard Width="100%" Height="100%" Style="padding: 8px">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5"><b>New Goal</b></MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Medium"
+                        OnClick="() => CloseNewGoal()" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.caption">Text</MudText>
+                <MudTextField T="string" Variant="Variant.Text" Clearable="true" @bind-Text="newGoal.Text" />
+                <MudStack Class="pt-6">
+                    <MudFab Label=" " EndIcon="@Icons.Material.Filled.Add" Size="Size.Medium" Color="Color.Primary"
+                        Disabled="editButtonDisabled" OnClick="AddNewGoal" />
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudContainer>
+</MudOverlay>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="pt-lg-12 pt-md-8 pt-sm-4 pt-4 p-4 pb-lg-12 pb-md-8 pb-sm-4 pb-4"
+    style="height: 100vh; width: 100vw;">
+    <MudCard Style="height: 100%; padding: 8px;" Class="overflow-auto">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5"><b>Today's Goals</b></MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudFab StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Medium" OnClick="OpenNewGoal" />
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudStack Style="height: 100%;">
+                @foreach (var goal in Goals)
+                {
+                    <MudCard Style="border-radius: 24px;">
+                        <MudCardContent Style="padding: 2px;">
+                            <MudStack Row="true">
+                                @if (goal.IsChecked)
+                                {
+                                    <MudIconButton Icon="@Icons.Material.Filled.Circle" Size="Size.Small" Class="px-2"
+                                        Style="padding: 8px;" Color="Color.Tertiary" OnClick="() => ToggleCheck(goal.Id)" />
+                                    <MudText Style="padding-top: 6px;"><s>@goal.Text</s></MudText>
+                                }
+                                else
+                                {
+                                    <MudIconButton Icon="@Icons.Material.Outlined.Circle" Size="Size.Small" Class="px-2"
+                                        Style="padding: 8px;" Color="Color.Tertiary" OnClick="() => ToggleCheck(goal.Id)" />
+                                    <MudText Style="padding-top: 6px;">@goal.Text</MudText>
+                                }
+                                <MudSpacer />
+                                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Class="px-2"
+                                    Style="padding: 8px;" OnClick="() => OpenOptions(goal)" />
+                            </MudStack>
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>

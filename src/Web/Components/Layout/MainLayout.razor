@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="MyCustomTheme" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout style="height: 100vh">
+    <MudMainContent style="height: 100vh">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code{
+    MudTheme MyCustomTheme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = Colors.Blue.Default,
+            Secondary = Colors.Cyan.Default,
+            Tertiary = Colors.Pink.Default
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            AppbarHeight = "0px",
+            DefaultBorderRadius = "20px"
+        }
+    };
+}

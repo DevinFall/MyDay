@@ -1,0 +1,40 @@
+version: '3'
+services:
+  web:
+    image: ghcr.io/devinfall/myday.web
+    ports:
+      - "80:8080"
+    environment:
+      - ApiConnection__BaseAddress=http://172.50.0.3
+      - ApiConnection__Port=8080
+    networks:
+      - backend
+    depends_on:
+      - api
+  api:
+    image: ghcr.io/devinfall/myday.api
+    environment:
+      - ConnectionStrings__DefaultConnection=server=172.50.0.2;user=root;password=1234;database=ef
+    networks:
+      backend:
+        ipv4_address: 172.50.0.3
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=ef
+    volumes:
+      - ./config:/docker-entrypoint-initdb.d
+    networks:
+      backend:
+        ipv4_address: 172.50.0.2
+    
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.50.0.0/16
+          gateway: 172.50.0.1
